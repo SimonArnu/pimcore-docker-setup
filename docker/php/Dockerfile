@@ -1,8 +1,15 @@
-FROM php:7.2-fpm
+FROM php:8.2-rc-fpm-bullseye
 
+RUN sed -i -e 's/http:\/\//https:\/\//' /etc/apt/sources.list
+
+RUN apt-get update && \
+        apt-get install -y --no-install-recommends apt-transport-https
 # install git
+
 RUN apt-get update && \
         apt-get install -y --no-install-recommends git
+
+RUN cat /etc/apt/sources.list
 
 #install some base extensions
 RUN apt-get install -y \
@@ -18,7 +25,9 @@ RUN apt-get install -y \
         libxpm-dev \
         libvpx-dev \
         mariadb-client \
-        libxml2-dev
+        libxml2-dev \
+        libzip-dev \
+        libonig-dev
 
 RUN docker-php-ext-install -j$(nproc) \
         zip \
